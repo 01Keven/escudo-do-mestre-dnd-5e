@@ -1,5 +1,3 @@
-// script.js
-
 document.addEventListener("DOMContentLoaded", function() {
   const monsterList = document.getElementById("monsterList");
   const monsterDetails = document.getElementById("monsterDetails");
@@ -26,36 +24,132 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function formatMonsterData(monsterData) {
     let formattedData = `
-      <h2>${monsterData.name}</h2>
+    <div id="wrp-pagecontent" class="wrp_pagecontent_hidden">
+      <table id="table-pagecontent" class="table_w_100">
+        
+      <tr>
+        <th class="border"></th>
+      </tr>
+      
+      <tr>
+        <th class="th_name">
+          <h1 class="monster_name">${monsterData.name}</h1>
+        </th>
+      </tr>
+
       <img src="https://www.dnd5eapi.co${monsterData.image}" alt="${monsterData.name}">
-      <p><strong>Alignment:</strong> ${monsterData.alignment}</p>
-      <p><strong>Armor Class:</strong> ${formatArmorClass(monsterData.armor_class)}</p>
-      <p><strong>Hit Points:</strong> ${monsterData.hit_points}</p>
-      <p><strong>Hit Dice:</strong> ${monsterData.hit_dice}</p>
-      <p><strong>Speed:</strong> ${formatSpeed(monsterData.speed)}</p>
-      <p><strong>Strength:</strong> ${monsterData.strength}</p>
-      <p><strong>Dexterity:</strong> ${monsterData.dexterity}</p>
-      <p><strong>Constitution:</strong> ${monsterData.constitution}</p>
-      <p><strong>Intelligence:</strong> ${monsterData.intelligence}</p>
-      <p><strong>Wisdom:</strong> ${monsterData.wisdom}</p>
-      <p><strong>Charisma:</strong> ${monsterData.charisma}</p>
-      <p><strong>Challenge Rating:</strong> ${monsterData.challenge_rating}</p>
-      <p><strong>Proficiency Bonus:</strong> ${monsterData.proficiency_bonus}</p>
-      <p><strong>XP:</strong> ${monsterData.xp}</p>
-      <p><strong>Actions:</strong></p>
-      <ul>
-    `;
-    if (monsterData.actions) {
-      monsterData.actions.forEach(action => {
-        formattedData += `<li>${action.name}: ${action.desc}</li>`;
-      });
-    }
-    formattedData += `</ul>`;
+      
+      <tr>
+        <td>
+          <div class="mon_size_type_sub_align">
+            <strong>Size:</strong> ${monsterData.size}
+            <strong>Type:</strong> ${monsterData.type}
+            <strong>Subtype:</strong> ${monsterData.subtype}
+            <strong>Alignment:</strong> ${monsterData.alignment}
+          </div>
+        </td>
+      </tr>
+      
+      <tr>
+        <th class="divider"></th>
+      </tr>
+      
+      <tr>
+        <td>
+            <strong>Armor Class:</strong> ${formatArmorClass(monsterData.armor_class)}
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+            <strong>Hit Points:</strong> ${monsterData.hit_points} (${monsterData.hit_dice})
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <strong>Speed:</strong> ${formatSpeed(monsterData.speed)}
+        </td>
+      </tr>
+
+      <tr>
+        <th class="divider"></th>
+      </tr>
+
+      <tr>
+        <th class="atr_text">
+          <strong>Str</strong>
+        </th>
+        <th class="atr_text">
+          <strong>Dex</strong>
+        </th>
+        <th class="atr_text">
+          <strong>Con</strong>
+        </th>
+        <th class="atr_text">
+          <strong>Int</strong>
+        </th>
+        <th class="atr_text">
+          <strong>Wis</strong>
+        </th>
+        <th class="atr_text">
+          <strong>Cha</strong>
+        </th>
+      </tr>
+
+      <tr>
+        <td>${monsterData.strength}</td>
+        <td>${monsterData.dexterity}</td>
+        <td>${monsterData.constitution}</td>
+        <td>${monsterData.intelligence}</td>
+        <td>${monsterData.wisdom}</td>
+        <td>${monsterData.charisma}</td>
+      </tr>
+
+      <tr>
+        <th class="divider"></th>
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>Proficiencies:</strong> ${formatProficiencies(monsterData.proficiencies)}
+        </td>
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>Special Abilities:</strong>
+          <ul>
+            ${monsterData.special_abilities.map(ability => `<li>${ability.name}: ${ability.desc}</li>`).join('')}
+          </ul>
+        </td>
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>Actions:</strong>
+          <ul>
+            ${monsterData.actions.map(action => `<li>${action.name}: ${action.desc}</li>`).join('')}
+          </ul>
+        </td>
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>Legendary Actions:</strong>
+          <ul>
+            ${monsterData.legendary_actions.map(action => `<li>${action.name}: ${action.desc}</li>`).join('')}
+          </ul>
+        </td>
+      </tr>
+      
+      </table>
+      </div>`;
     return formattedData;
   }
 
   function formatSpeed(speed) {
-    return Object.entries(speed).map(([mode, value]) => `${mode}: ${value}`).join(", ");
+    return Object.entries(speed).map(([mode, value]) => `(${mode}) ${value}`).join(", ");
   }
 
   function formatArmorClass(armorClass) {
@@ -65,4 +159,28 @@ document.addEventListener("DOMContentLoaded", function() {
       return armorClass.value + " (" + armorClass.type + ")";
     }
   }
+
+  function formatProficiencies(proficiencies) {
+    const proficiencyGroups = {};
+  
+    // Agrupa proficiências pelo nome
+    proficiencies.forEach(proficiency => {
+      const name = proficiency.proficiency.name;
+      const value = proficiency.value;
+  
+      if (!proficiencyGroups[name]) {
+        proficiencyGroups[name] = [];
+      }
+  
+      proficiencyGroups[name].push(value);
+    });
+  
+    // Formata os grupos de proficiências
+    return Object.entries(proficiencyGroups).map(([name, values]) => {
+      const formattedName = name.startsWith('Skill:') ? name.replace('Skill: ', '') : name.replace('Saving Throw: ', '');
+      const formattedValues = values.map(value => value > 0 ? `+${value}` : value);
+      return `<span>${formattedName}: ${formattedValues.join(', ')}</span>`;
+    }).join(' ');
+  }  
+  
 });
