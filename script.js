@@ -1,8 +1,27 @@
+var myHeaders = new Headers();
+myHeaders.append("Accept", "application/json");
+
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+
+fetch("https://www.dnd5eapi.co/api", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+
 const monsterInput = document.getElementById("monsterInput");
 const searchButton = document.getElementById("searchButton");
 const monsterResult = document.getElementById("monsterResult");
 
 searchButton.addEventListener("click", searchMonster);
+
+
 
 function searchMonster() {
   const monsterName = monsterInput.value.toLowerCase().replace(/\s+/g, "-");
@@ -43,13 +62,13 @@ function displayMonster(monsterData) {
     html += `<img src="https://www.dnd5eapi.co${monsterData.image}" alt="${monsterData.name}">`;
   
     // Index and name
-    html += `<p><strong>Index:</strong> ${monsterData.index}</p>`;
+    // html += `<p><strong>Index:</strong> ${monsterData.index}</p>`;
     html += `<p><strong>Name:</strong> ${monsterData.name}</p>`;
   
-    // Size, type, and subtype
-    html += `<p><strong>Size:</strong> ${monsterData.size}</p>`;
-    html += `<p><strong>Type:</strong> ${monsterData.type}</p>`;
-    html += `<p><strong>Subtype:</strong> ${monsterData.subtype || "None"}</p>`;
+   // Size, type, and subtype
+    html += `<span class="inline-block"><strong>Size:</strong> ${monsterData.size}</span>`;
+    html += `<span class="inline-block"><strong>Type:</strong> ${monsterData.type}</span>`;
+    html += `<span class="inline-block"><strong>Subtype:</strong> ${monsterData.subtype || "None"}</span>`;
   
     // Alignment
     html += `<p><strong>Alignment:</strong> ${monsterData.alignment}</p>`;
