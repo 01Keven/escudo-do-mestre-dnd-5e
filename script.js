@@ -115,6 +115,24 @@ document.addEventListener("DOMContentLoaded", function() {
           <strong>Proficiencies:</strong> ${formatProficiencies(monsterData.proficiencies)}
         </td>
       </tr>
+
+      <tr>
+        <td>
+          <strong>Damage Vulnerabilities:</strong> ${monsterData.damage_vulnerabilities}
+        </td>
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>Damage Resistances:</strong> ${monsterData.damage_resistances}
+        </td>
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>Damage Immunities:</strong> ${monsterData.damage_immunities}
+        </td>
+      </tr>
       
       <tr>
         <td>
@@ -178,8 +196,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Formata os grupos de proficiências
     return Object.entries(proficiencyGroups).map(([name, values]) => {
       const formattedName = name.startsWith('Skill:') ? name.replace('Skill: ', '') : name.replace('Saving Throw: ', '');
-      const formattedValues = values.map(value => value > 0 ? `+${value}` : value);
-      return `<span>${formattedName}: ${formattedValues.join(', ')}</span>`;
+      const formattedValues = values.map(value => value > 0 ? `${value}` : value);
+      return `<span>${formattedName}: +${formattedValues.join(', ')}, </span>`;
     }).join(' ');
   }  
   
